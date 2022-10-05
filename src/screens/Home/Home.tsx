@@ -19,7 +19,10 @@ import {
   ContainerButtonOrder,
   ButtonNext,
   ButtonClose,
+  ModalCategory,
 } from "./styles";
+import { Modal } from "react-native";
+import { ModalPicker } from "../../components/ModalPicker";
 import Progress from "../../components/Progress";
 import { AntDesign } from "@expo/vector-icons";
 import { api } from "../../services/api";
@@ -32,10 +35,10 @@ type RouteParams = {
     order_id: string;
   };
 };
-type CategoryProps = {
+export type CategoryProps = {
   id: string;
   name: string;
-}
+};
 
 type OrderProp = RouteProp<RouteParams, "Home">;
 
@@ -46,11 +49,17 @@ export default function Home() {
   const [category, setCategory] = useState<CategoryProps[] | []>([]);
   const [categorySelect, setCategorySelect] = useState<CategoryProps>();
 
-  const [amount, setAmount] = useState(1)
+  const [amount, setAmount] = useState('1');
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    
-  }, [])
+    async function loadingInfo() {
+      const response = await api.get("/category");
+      setCategory(response.data);
+      setCategorySelect(response.data[0]); //Pegando a primeira posição
+    }
+    loadingInfo();
+  }, []);
 
   //excluindo uma mesa
   async function closeOrder() {
@@ -82,10 +91,12 @@ export default function Home() {
           <BoxYellow></BoxYellow>
           <BoxGray>
             <AlignBoxGray>
-              <TitleCategory>Pizza</TitleCategory>
-              <ButtonPopUp>
-                <AntDesign name="down" size={24} color="#E5B817" />
-              </ButtonPopUp>
+              <TitleCategory>{categorySelect?.name}</TitleCategory>
+              {category.length !== 0 && (
+                <ButtonPopUp onPress={() => setModal(true)}>
+                  <AntDesign name="down" size={24} color="#E5B817" />
+                </ButtonPopUp>
+              )}
             </AlignBoxGray>
           </BoxGray>
         </ContainerCategory>
@@ -107,10 +118,10 @@ export default function Home() {
         <BoxYellow></BoxYellow>
         <BoxGrayQuan>
           <InputQuant
-          placeholder="Quantidade"
-          placeholderTextColor="#474747"
-          value={amount}
-          onChangeText={setAmount}
+            placeholder="Quantidade"
+            placeholderTextColor="#474747"
+            value={amount}
+            onChangeText={setAmount}
           />
         </BoxGrayQuan>
         <BoxButton>
@@ -132,6 +143,14 @@ export default function Home() {
       </ContainerButtonOrder>
 
       <Progress />
+
+      <Modal transparent={true} visible={modal} animationType="slide">
+        <ModalPicker
+          handleCloseModal={() => setModal(false)}
+          options={category}
+          selectedItem={() => {}}
+        />
+      </Modal>
     </Container>
   );
 }

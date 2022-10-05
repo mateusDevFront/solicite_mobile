@@ -109,3 +109,4 @@ export const ButtonClose = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
 `
+export const ModalCategory = styled.Modal``
