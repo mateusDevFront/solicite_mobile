@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Text } from "react-native";
+import { Alert, Text } from "react-native";
 import {
   Container,
   Title,
@@ -19,14 +19,17 @@ import {
   ContainerButtonOrder,
   ButtonNext,
   ButtonClose,
-  ModalCategory,
+  ListProducts,
 } from "./styles";
 import { Modal } from "react-native";
 import { ModalPicker } from "../../components/ModalPicker";
 import Progress from "../../components/Progress";
+import { ListProductsItems } from "../../components/ListProductsItems";
 import { AntDesign } from "@expo/vector-icons";
 import { api } from "../../services/api";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
+import {StackPramsList} from '../../routes/app.routes'
 
 type RouteParams = {
   Home: {
@@ -39,18 +42,37 @@ export type CategoryProps = {
   id: string;
   name: string;
 };
+type ProductProps = {
+  id: string;
+  name: string;
+};
+type ItemProps = {
+  id: string;
+  product_id: string;
+  name: string;
+  amount: string | number;
+}; 
 
 type OrderProp = RouteProp<RouteParams, "Home">;
 
 export default function Home() {
   const route = useRoute<OrderProp>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
 
   const [category, setCategory] = useState<CategoryProps[] | []>([]);
-  const [categorySelect, setCategorySelect] = useState<CategoryProps>();
+  const [categorySelect, setCategorySelect] = useState<
+    CategoryProps | undefined
+  >();
 
-  const [amount, setAmount] = useState('1');
+  const [amount, setAmount] = useState("1");
   const [modal, setModal] = useState(false);
+  const [items, setItems] = useState<ItemProps[]>([]);
+
+  const [products, setProducts] = useState<ProductProps[] | []>([]);
+  const [productSelect, setProductSelect] = useState<
+    ProductProps | undefined
+  >();
+  const [modalProduct, setModalProduct] = useState(false);
 
   useEffect(() => {
     async function loadingInfo() {
@@ -60,6 +82,21 @@ export default function Home() {
     }
     loadingInfo();
   }, []);
+
+  //Chamar toda vez que selecionar uma categoria
+  useEffect(() => {
+    async function loadingProduct() {
+      const response = await api.get("/category/product", {
+        params: {
+          category_id: categorySelect?.id,
+        },
+      });
+      /* console.log(response.data) */
+      setProducts(response.data);
+      setProductSelect(response.data[0]);
+    }
+    loadingProduct();
+  }, [categorySelect]);
 
   //excluindo uma mesa
   async function closeOrder() {
@@ -74,6 +111,62 @@ export default function Home() {
     } catch (err) {
       console.log("erro", err);
     }
+  }
+
+  function handleChangeCategory(item: CategoryProps) {
+    setCategorySelect(item);
+  }
+  function handleChangeProduct(item: ProductProps) {
+    setProductSelect(item);
+  }
+  //adicionar produto na mesa
+  async function handleAddItem() {
+    /* console.log('clicou') */
+    const response = await api.post("/order/add", {
+      order_id: route.params?.order_id,
+      product_id: productSelect?.id,
+      amount: Number(amount),
+    });
+    let data = {
+      id: response.data.id,
+      product_id: productSelect?.id as string,
+      name: productSelect?.name as string,
+      amount: amount,
+    };
+    setItems((oldArray) => [...oldArray, data]);
+  }
+
+  function deleteItem(item_id) {
+    /* console.log('deletado') */
+    Alert.alert("OPA!", "Tem certeza que deseja excluir essa opção do seu pedido?", [
+      {
+        text: "Cancelar",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "Deletar",
+        onPress: () => handleDeleteItem(item_id),
+      },
+    ]);
+  }
+
+  async function handleDeleteItem(item_id: string) {
+    await api.delete("/order/remove", {
+      params: {
+        item_id: item_id,
+      },
+    });
+    //Remover da api e remover o item da lista//
+    let removeItem = items.filter((item) => {
+      return item.id !== item_id;
+    });
+    setItems(removeItem);
+  }
+
+  function handleScreenFinish(){
+    /* alert('ok') */
+    
   }
 
   return (
@@ -105,10 +198,12 @@ export default function Home() {
           <BoxYellow></BoxYellow>
           <BoxGray>
             <AlignBoxGray>
-              <TitleCategory>Pizza - Calabresa Acebolada</TitleCategory>
-              <ButtonPopUp>
-                <AntDesign name="down" size={24} color="#E5B817" />
-              </ButtonPopUp>
+              <TitleCategory>{productSelect?.name}</TitleCategory>
+              {products.length !== 0 && (
+                <ButtonPopUp onPress={() => setModalProduct(true)}>
+                  <AntDesign name="down" size={24} color="#E5B817" />
+                </ButtonPopUp>
+              )}
             </AlignBoxGray>
           </BoxGray>
         </ContainerCategory>
@@ -124,7 +219,7 @@ export default function Home() {
             onChangeText={setAmount}
           />
         </BoxGrayQuan>
-        <BoxButton>
+        <BoxButton onPress={handleAddItem}>
           <Text style={{ color: "#E5B817", fontSize: 30, fontWeight: "bold" }}>
             +
           </Text>
@@ -134,21 +229,44 @@ export default function Home() {
       {/* <ButtonValidation onPress={() => {}} title="Próximo" /> */}
 
       <ContainerButtonOrder>
-        <ButtonNext>
+        <ButtonNext
+          onPress={handleScreenFinish}
+          style={[{ opacity: items.length === 0 ? 0.3 : 1 }]}
+          disabled={items.length == 0}
+        >
           <Text>{"Próximo"}</Text>
         </ButtonNext>
-        <ButtonClose onPress={closeOrder}>
-          <Text>{"Excluir"}</Text>
-        </ButtonClose>
+        {items.length === 0 && (
+          <ButtonClose onPress={closeOrder}>
+            <Text>{"Excluir"}</Text>
+          </ButtonClose>
+        )}
       </ContainerButtonOrder>
 
-      <Progress />
+      <ListProducts
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1, marginTop: 25 }}
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ListProductsItems deleteItem={deleteItem} data={item} />
+        )}
+      />
+
+      {/* <Progress /> */}
 
       <Modal transparent={true} visible={modal} animationType="slide">
         <ModalPicker
           handleCloseModal={() => setModal(false)}
           options={category}
-          selectedItem={() => {}}
+          selectedItem={handleChangeCategory}
+        />
+      </Modal>
+      <Modal transparent={true} visible={modalProduct} animationType="slide">
+        <ModalPicker
+          handleCloseModal={() => setModalProduct(false)}
+          options={products}
+          selectedItem={handleChangeProduct}
         />
       </Modal>
     </Container>

@@ -110,3 +110,4 @@ export const ButtonClose = styled.TouchableOpacity`
     align-items: center;
 `
 export const ModalCategory = styled.Modal``
+export const ListProducts = styled.FlatList``

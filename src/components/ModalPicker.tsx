@@ -2,13 +2,18 @@ import React from "react";
 import styled from "styled-components/native";
 import { CategoryProps } from "../screens/Home/Home";
 import { Dimensions } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 interface ModalProps {
   options: CategoryProps[];
   handleCloseModal: () => void;
-  selectedItem: () => void;
+  selectedItem: (item: CategoryProps) => void;
 }
 
+export const Container = styled.View`
+  /*     align-items: center;
+  flex-direction: row; */
+`;
 export const Content = styled.View`
   width: 80%;
   height: 250px;
@@ -31,9 +36,10 @@ export const Button = styled.TouchableOpacity`
   align-items: center;
 `;
 export const ButtonOption = styled.TouchableOpacity`
-  align-items: flex-start;
   border-top-width: 1px;
   border-color: #e5b817;
+  flex-direction: row;
+  align-items: center;
 `;
 export const TextOption = styled.Text`
   margin: 15px;
@@ -51,12 +57,14 @@ export function ModalPicker({
 }: ModalProps) {
   async function handleItem(item: CategoryProps) {
     /* console.log(item); */
-    selectedItem(item)
+    selectedItem(item);
+    handleCloseModal();
   }
 
   const option = options.map((item, index) => (
     <ButtonOption key={index} onPress={() => handleItem(item)}>
-      <TextOption>{item?.name}</TextOption>
+      <AntDesign  style={{marginLeft: 15}} name="star" size={15} color="#e5b817" />
+      <TextOption style={{marginLeft: 15}} >{item?.name}</TextOption>
     </ButtonOption>
   ));
 
@@ -66,7 +74,8 @@ export function ModalPicker({
         <HeaderCategory>
           <Text style={{ fontSize: 17 }}>Escolha uma categoria</Text>
         </HeaderCategory>
-        <Scroll showsVerticalScrollIndicator={false}>{option}</Scroll>
+        <Scroll showsVerticalScrollIndicator={false}>
+        {option}</Scroll>
       </Content>
     </Button>
   );
