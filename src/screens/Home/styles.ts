@@ -86,3 +86,26 @@ export const BoxButton = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
 `
+export const ContainerButtonOrder = styled.View`
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+`
+export const ButtonNext = styled.TouchableOpacity`
+    height: 50px;
+    width: 48%;
+    background-color: #E5B817;
+    border-radius: 5px;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+`
+export const ButtonClose = styled.TouchableOpacity`
+    height: 50px;
+    width:48%;
+    background-color: #E13030;
+    border-radius: 5px;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+`

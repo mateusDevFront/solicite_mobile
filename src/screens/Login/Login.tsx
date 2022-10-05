@@ -15,11 +15,11 @@ import { useNavigation } from "@react-navigation/native";
 import imagebackground from "../../assets/login.jpg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
-
+import {ActivityIndicator} from 'react-native'
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Login() {
-  const { signIn } = useContext(AuthContext);
+  const { signIn, loadingAuth } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,6 +68,7 @@ export default function Login() {
                 onChangeText={(e) => setPassword(e)}
               />
             </ContainerInput>
+            
             <ButtonValidation onPress={handleLogin} title="Entrar" />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>

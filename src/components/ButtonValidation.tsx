@@ -1,5 +1,7 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components/native';
+import {ActivityIndicator} from 'react-native'
+import { AuthContext } from '../context/AuthContext'
 
 export const ContainerButton = styled.TouchableOpacity`
     height: 50px;
@@ -21,9 +23,16 @@ type Props = {
 }
 
 export default function ButtonValidation({title, onPress}: Props){
+
+    const {loadingAuth} = useContext(AuthContext);
+
     return(
         <ContainerButton onPress={onPress}>
-            <TextButton>{title}</TextButton>
+            {loadingAuth ? (
+                <ActivityIndicator size={25} color="#151515"/> 
+                ): (
+                <TextButton>{title}</TextButton>
+            )}
         </ContainerButton>
     )
 }

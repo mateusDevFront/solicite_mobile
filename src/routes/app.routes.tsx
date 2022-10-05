@@ -3,7 +3,17 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import Dashboard from '../screens/Dashboard/Dashboard';
 import Home from '../screens/Home/Home'
 
-const Stack = createNativeStackNavigator();
+
+export type StackPramsList = {
+    Dashboard : undefined;
+    Home: {
+        name: string,
+        number: number | string;
+        order_id: string;
+    };
+}
+
+const Stack = createNativeStackNavigator<StackPramsList>();
 
 function AppRoutes(){
     return(

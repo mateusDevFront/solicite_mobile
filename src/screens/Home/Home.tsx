@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text } from "react-native";
 import {
   Container,
@@ -15,19 +15,66 @@ import {
   ContainerQuant,
   BoxGrayQuan,
   InputQuant,
-  BoxButton
+  BoxButton,
+  ContainerButtonOrder,
+  ButtonNext,
+  ButtonClose,
 } from "./styles";
 import Progress from "../../components/Progress";
 import { AntDesign } from "@expo/vector-icons";
-import ButtonValidation from '../../components/ButtonValidation'
+import { api } from "../../services/api";
+import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+
+type RouteParams = {
+  Home: {
+    name: string;
+    number: string | number;
+    order_id: string;
+  };
+};
+type CategoryProps = {
+  id: string;
+  name: string;
+}
+
+type OrderProp = RouteProp<RouteParams, "Home">;
 
 export default function Home() {
+  const route = useRoute<OrderProp>();
+  const navigation = useNavigation();
+
+  const [category, setCategory] = useState<CategoryProps[] | []>([]);
+  const [categorySelect, setCategorySelect] = useState<CategoryProps>();
+
+  const [amount, setAmount] = useState(1)
+
+  useEffect(() => {
+    
+  }, [])
+
+  //excluindo uma mesa
+  async function closeOrder() {
+    /* alert('clicou')  */
+    api.delete("/order", {
+      params: {
+        order_id: route.params?.order_id,
+      },
+    });
+    navigation.goBack();
+    try {
+    } catch (err) {
+      console.log("erro", err);
+    }
+  }
+
   return (
     <Container>
       <Title>Faça seu pedido!</Title>
 
       <ContainerCliente>
-        <TitleCliente>Mateus - Mesa 22</TitleCliente>
+        <TitleCliente>
+          {`${route.params.name} - Mesa ${route.params.number}`}
+        </TitleCliente>
       </ContainerCliente>
 
       <ContainerCategoryAll>
@@ -60,21 +107,31 @@ export default function Home() {
         <BoxYellow></BoxYellow>
         <BoxGrayQuan>
           <InputQuant
-            placeholder="Quantidade"
-            placeholderTextColor="#474747"
+          placeholder="Quantidade"
+          placeholderTextColor="#474747"
+          value={amount}
+          onChangeText={setAmount}
           />
         </BoxGrayQuan>
         <BoxButton>
-          <Text style={{color: '#E5B817', fontSize: 30, fontWeight: 'bold' }}>+</Text>
+          <Text style={{ color: "#E5B817", fontSize: 30, fontWeight: "bold" }}>
+            +
+          </Text>
         </BoxButton>
       </ContainerQuant>
 
-      <ButtonValidation
-        onPress={() => {}}
-        title="Próximo"
-      />
+      {/* <ButtonValidation onPress={() => {}} title="Próximo" /> */}
 
-      <Progress/>
+      <ContainerButtonOrder>
+        <ButtonNext>
+          <Text>{"Próximo"}</Text>
+        </ButtonNext>
+        <ButtonClose onPress={closeOrder}>
+          <Text>{"Excluir"}</Text>
+        </ButtonClose>
+      </ContainerButtonOrder>
+
+      <Progress />
     </Container>
   );
 }
