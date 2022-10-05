@@ -11,6 +11,10 @@ export type StackPramsList = {
         number: number | string;
         order_id: string;
     };
+    FinishOrder: {
+        number: number | string;
+        order_id: string;
+    }
 }
 
 const Stack = createNativeStackNavigator<StackPramsList>();

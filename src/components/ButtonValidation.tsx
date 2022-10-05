@@ -19,15 +19,17 @@ export const TextButton = styled.Text`
 `
 type Props = {
     title: string;
+    style: string;
+    disabled: string;
     onPress(): void
 }
 
-export default function ButtonValidation({title, onPress}: Props){
+export default function ButtonValidation({title, onPress, style, disabled}: Props){
 
     const {loadingAuth} = useContext(AuthContext);
 
     return(
-        <ContainerButton onPress={onPress}>
+        <ContainerButton disabled={disabled} style={style} onPress={onPress}>
             {loadingAuth ? (
                 <ActivityIndicator size={25} color="#151515"/> 
                 ): (
