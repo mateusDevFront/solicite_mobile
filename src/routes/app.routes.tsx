@@ -1,11 +1,16 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import Dashboard from '../screens/Dashboard/Dashboard';
-import Home from '../screens/Home/Home'
-import { FinishOrder } from '../screens/Finish/FinishOrder';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+
+import MainTab from './mainTab'
+import CusttomTabs from '../components/CustomTabs';
 
 export type StackPramsList = {
     Dashboard : undefined;
+    MainTab: {
+        name: string,
+        number: number | string;
+        order_id: string;
+    }
     Home: {
         name: string,
         number: number | string;
@@ -17,15 +22,13 @@ export type StackPramsList = {
     }
 }
 
-const Stack = createNativeStackNavigator<StackPramsList>();
+const Tab = createBottomTabNavigator<StackPramsList>()
 
 function AppRoutes(){
     return(
-        <Stack.Navigator>
-            <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false}}/>
-            <Stack.Screen name="Home" component={Home} options={{ headerShown: false}}/>
-            <Stack.Screen name="FinishOrder" component={FinishOrder} options={{ headerShown: false}}/>
-        </Stack.Navigator>
+        <Tab.Navigator tabBar={(props) => <CusttomTabs {...props} />}>
+          <Tab.Screen options={{ headerShown: false}} name="MainTab" component={MainTab} />
+        </Tab.Navigator>
     )
 }
 export default AppRoutes;

@@ -15,7 +15,7 @@ type RouteDetail = {
 }
 type FinishOrderProp = RouteProp<RouteDetail, 'FinishOrder'>
 
-export function FinishOrder() {
+export default function FinishOrder() {
   const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
   const route = useRoute<FinishOrderProp>()
 
@@ -55,8 +55,8 @@ export function FinishOrder() {
       <ButtonFinishItem onPress={handleFinishOrderItem}>
         <Text style={{ color: "#151515" }}>Finalizar pedido</Text>
       </ButtonFinishItem>
-      <ButtonFinishItem onPress={() => navigation.goBack()} style={{ backgroundColor: "#E13030" }}>
-        <Text style={{ color: "#151515" }}>Cancelar</Text>
+      <ButtonFinishItem onPress={navigation.goBack} style={{ backgroundColor: '#151515',borderWidth: 2, borderColor: '#E13030'}}>
+        <Text style={{ color: "#E13030" }}>Cancelar</Text>
       </ButtonFinishItem>
     </Container>
   );

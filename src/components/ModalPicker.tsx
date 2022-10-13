@@ -50,16 +50,12 @@ export const Scroll = styled.ScrollView``;
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
-export function ModalPicker({
-  handleCloseModal,
-  options,
-  selectedItem,
-}: ModalProps) {
+export function ModalPicker({handleCloseModal, options,selectedItem,}: ModalProps) {
   async function handleItem(item: CategoryProps) {
     /* console.log(item); */
     selectedItem(item);
     handleCloseModal();
-  }
+}
 
   const option = options.map((item, index) => (
     <ButtonOption key={index} onPress={() => handleItem(item)}>

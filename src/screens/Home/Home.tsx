@@ -240,8 +240,10 @@ export default function Home() {
           <Text>{"Próximo"}</Text>
         </ButtonNext>
         {items.length === 0 && (
-          <ButtonClose onPress={closeOrder}>
-            <Text>{"Excluir"}</Text>
+          <ButtonClose
+          style={{ backgroundColor: '#151515',borderWidth: 2, borderColor: '#E13030'}}
+          onPress={closeOrder}>
+            <Text style={{color: '#E13030', fontSize: 15}}>{"Excluir"}</Text>
           </ButtonClose>
         )}
       </ContainerButtonOrder>

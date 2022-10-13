@@ -77,7 +77,7 @@ export default function Dashboard() {
           title="Abrir"
         />
 
-        <Progress />
+        {/* <Progress /> */}
       </Container>
     </ImageBackground>
   );
