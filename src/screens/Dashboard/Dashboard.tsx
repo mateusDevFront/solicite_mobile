@@ -8,13 +8,12 @@ import {
   ContainerInput,
   Input,
 } from "./styles";
-import Progress from "../../components/Progress";
 import { useNavigation } from "@react-navigation/native";
 import dashboardBg from "../../assets/dashboard.jpg";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackPramsList } from "../../routes/app.routes";
+import { StackPramsList } from "../../routes/mainTab"
 import { api } from "../../services/api";
 
 export default function Dashboard() {
@@ -72,7 +71,7 @@ export default function Dashboard() {
 
         <ButtonValidation
           style={[{ opacity: number.length === 0 ? 0.4 : 1 }]}
-          disabled={number.length == 0}
+          disabled={number.length === 0}
           onPress={openTable}
           title="Abrir"
         />

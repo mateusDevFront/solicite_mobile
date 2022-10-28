@@ -1,30 +1,36 @@
 import React from "react";
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { AntDesign } from "@expo/vector-icons";
 
 export const Header = styled.View`
+  margin-top: 65px;
   flex-direction: row;
-  margin-top: 50px;
-  width: 90%;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
-export const ButtonIcon = styled.TouchableOpacity``
+export const ButtonIcon = styled.TouchableOpacity``;
+export const ContainerTitle = styled.View`
+  height: 50px;
+  align-items: flex-end;
+`
 export const Text = styled.Text`
   color: #fff;
   font-size: 18px;
-  margin-left: 75px;
+  margin-left: 10px;
 `;
 
 export default function Form({ title }) {
-
   const navigation = useNavigation();
 
   return (
     <Header>
       <ButtonIcon onPress={() => navigation.goBack()}>
-        <AntDesign name="arrowleft" size={24} color="white" />
+        <AntDesign name="arrowleft" size={26} color="#fff" />
       </ButtonIcon>
-      <Text>{title}</Text>
+      <ContainerTitle>
+        <Text>{title}</Text>
+      </ContainerTitle>
     </Header>
   );
 }

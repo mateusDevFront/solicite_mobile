@@ -9,11 +9,6 @@ interface ModalProps {
   handleCloseModal: () => void;
   selectedItem: (item: CategoryProps) => void;
 }
-
-export const Container = styled.View`
-  /*     align-items: center;
-  flex-direction: row; */
-`;
 export const Content = styled.View`
   width: 80%;
   height: 250px;

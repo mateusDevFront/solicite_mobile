@@ -117,7 +117,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         loading,
         loadingAuth,
         signOut,
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

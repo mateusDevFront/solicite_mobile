@@ -14,10 +14,24 @@ export type StackPramsList = {
     number: string;
     order_id: string;
   };
-  Search: undefined;
+  Search: {
+    id: string;
+    name: string;
+    table: number;
+  };
   Profile: undefined;
   Chat: undefined;
-  DetailOrder: undefined;
+  MainTab: {
+    name: string;
+    number: number | string;
+    order_id: string;
+  };
+  DetailOrder: {
+    id: string;
+    name: string;
+    table: string;
+    status: boolean;
+  };
   Home: {
     name: string;
     number: number | string;
@@ -33,7 +47,7 @@ const Stack = createNativeStackNavigator<StackPramsList>();
 
 export default function MainTab() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Dashboard">
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
@@ -44,7 +58,7 @@ export default function MainTab() {
         component={Home}
         options={{ headerShown: false }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="FinishOrder"
         component={FinishOrder}
         options={{ headerShown: false }}
@@ -69,7 +83,6 @@ export default function MainTab() {
         component={Profile}
         options={{ headerShown: false }}
       />
-     
     </Stack.Navigator>
   );
 }

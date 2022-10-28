@@ -18,7 +18,7 @@ export const ModalContainer = styled.View`
   flex: 1;
   width: 95%;
   background-color: #212121;
-  margin-top: 190px;
+  margin-top: 300px;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
   align-items: center;
@@ -74,7 +74,7 @@ const Modal = ({ onPress }) => {
         <Title>Alterar detalhes do pedido</Title>
         <Input>
           <TextInput
-            placeholder="seu pedido vai ser aqui..."
+            placeholder="..."
             placeholderTextColor="#474747"
             autoCapitalize="none"
             keyboardType="email-address"
@@ -82,7 +82,7 @@ const Modal = ({ onPress }) => {
         </Input>
         <Input>
           <TextInput
-            placeholder="seu pedido vai ser aqui..."
+            placeholder="..."
             placeholderTextColor="#474747"
             autoCapitalize="none"
             keyboardType="email-address"
@@ -90,7 +90,7 @@ const Modal = ({ onPress }) => {
         </Input>
         <Input>
           <TextInput
-            placeholder="seu pedido vai ser aqui..."
+            placeholder="..."
             placeholderTextColor="#474747"
             autoCapitalize="none"
             keyboardType="email-address"
@@ -98,7 +98,7 @@ const Modal = ({ onPress }) => {
         </Input>
 
         <ContainerButtonOrder>
-          <ButtonNext>
+          <ButtonNext onPress={() => alert('Em breve')}>
             <Text>{"Alterar"}</Text>
           </ButtonNext>
           <ButtonClose

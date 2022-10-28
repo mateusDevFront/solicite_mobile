@@ -1,26 +1,10 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {StackPramsList} from './mainTab'
 
 import MainTab from './mainTab'
 import CusttomTabs from '../components/CustomTabs';
 
-export type StackPramsList = {
-    Dashboard : undefined;
-    MainTab: {
-        name: string,
-        number: number | string;
-        order_id: string;
-    }
-    Home: {
-        name: string,
-        number: number | string;
-        order_id: string;
-    };
-    FinishOrder: {
-        number: number | string;
-        order_id: string;
-    }
-}
 
 const Tab = createBottomTabNavigator<StackPramsList>()
 

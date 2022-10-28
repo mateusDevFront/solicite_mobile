@@ -2,16 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 
-interface ItemProps {
-  data: {
-    id: string;
-    product_id: string;
-    name: string;
-    amount: string | number;
-  };
-  deleteItem: (item_id: string) => void;
-}
-
 export const Container = styled.View``;
 export const Text = styled.Text`
   color: #fff;
@@ -42,9 +32,19 @@ export const BoxGray = styled.View`
 `;
 export const ButtonClose = styled.TouchableOpacity``;
 
+interface ItemProps {
+  data: {
+    id: string;
+    product_id: string;
+    name: string;
+    amount: string | number;
+  };
+  deleteItem: (item_id: string) => void;
+}
+
 export function ListProductsItems({ data, deleteItem }: ItemProps) {
   function handleCloseItem() {
-    deleteItem(data.id)
+    deleteItem(data.id);
   }
 
   return (

@@ -23,13 +23,12 @@ import {
 } from "./styles";
 import { Modal } from "react-native";
 import { ModalPicker } from "../../components/ModalPicker";
-import Progress from "../../components/Progress";
 import { ListProductsItems } from "../../components/ListProductsItems";
 import { AntDesign } from "@expo/vector-icons";
 import { api } from "../../services/api";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
-import {StackPramsList} from '../../routes/app.routes'
+import {StackPramsList} from '../../routes/mainTab'
 
 type RouteParams = {
   Home: {
@@ -60,18 +59,14 @@ export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
 
   const [category, setCategory] = useState<CategoryProps[] | []>([]);
-  const [categorySelect, setCategorySelect] = useState<
-    CategoryProps | undefined
-  >();
+  const [categorySelect, setCategorySelect] = useState<CategoryProps | undefined>();
 
   const [amount, setAmount] = useState("1");
   const [modal, setModal] = useState(false);
   const [items, setItems] = useState<ItemProps[]>([]);
 
   const [products, setProducts] = useState<ProductProps[] | []>([]);
-  const [productSelect, setProductSelect] = useState<
-    ProductProps | undefined
-  >();
+  const [productSelect, setProductSelect] = useState<ProductProps | undefined >();
   const [modalProduct, setModalProduct] = useState(false);
 
   useEffect(() => {
