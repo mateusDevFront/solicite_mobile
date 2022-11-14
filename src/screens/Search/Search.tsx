@@ -42,8 +42,7 @@ export type OrderItemProps = {
     id: string;
     table: string | number;
     status: boolean;
-    name: string;
-    order_id: string;
+    name: string | null;
   };
 };
 
@@ -56,6 +55,8 @@ export default function Search({ orders }: PedidosProps) {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  /* console.log('modalItem', modalItem) */
+
   useEffect(() => {
     async function buscandoPedidos() {
       const response = await api.get("/orders");
@@ -63,6 +64,7 @@ export default function Search({ orders }: PedidosProps) {
     }
     buscandoPedidos();
   }, [clientes]);
+
 
   async function handleGetClientDetail(id: string) {
     const response = await api.get("/order/detail", {
@@ -74,6 +76,13 @@ export default function Search({ orders }: PedidosProps) {
     setModalVisible(true);
   }
 
+  function handleFinishItem(id: string){
+    const response = api.put('order/finish', {
+      order_id: id
+    })
+    setModalVisible(false)
+  }
+
   function closedModalDetail() {
     setModalVisible(false);
   }
@@ -83,34 +92,26 @@ export default function Search({ orders }: PedidosProps) {
       <HeaderReturn title="Pedidos Abertos" />
 
       <ContainerBody>
-        {/* <ContainerInput>
-          <TextInput
-            placeholder="Digite aqui..."
-            placeholderTextColor="#474747"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            value={search}
-            onChangeText={(text) => setSearch(text)}
-          />
-          <MaterialIcons name="person-search" size={24} color="#474747" />
-        </ContainerInput> */}
         {clientes.map((item, index) => (
-            <ContainerList key={index}>
-              <List>
-                <Text style={{ color: "#fff" }}>
-                  {item.name} - {"Mesa " + item.table}
-                </Text>
-                <ButtonIconSearch
-                  onPress={() => handleGetClientDetail(item.id)}
-                >
-                  <AntDesign name="setting" size={22} color="#fff" />
-                </ButtonIconSearch>
-              </List>
-            </ContainerList>
-          ))}
+          <ContainerList key={index}>
+            <List>
+              <Text style={{ color: "#fff" }}>
+                {item.name} - {"Mesa " + item.table}
+              </Text>
+              <ButtonIconSearch onPress={() => handleGetClientDetail(item.id)}>
+                <AntDesign name="setting" size={22} color="#fff" />
+              </ButtonIconSearch>
+            </List>
+          </ContainerList>
+        ))}
       </ContainerBody>
       <Modal transparent={true} visible={modalVisible} animationType="fade">
-        <ModalDetail order={modalItem} closedModal={closedModalDetail} />
+        <ModalDetail
+          order={modalItem}
+          isOpen={modalVisible}
+          onRequestClose={closedModalDetail}
+          handleFinishOrder={handleFinishItem}
+        />
       </Modal>
     </Container>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import {OrderItemProps} from '../Search'
+import { OrderItemProps } from "../Search";
 
 export const Container = styled.View`
   flex: 1;
@@ -70,49 +70,51 @@ export const AlignRowButton = styled.View`
 
 interface ModalOrderProps {
   isOpen: boolean;
+  onRequestClose: () => void;
   order: OrderItemProps[];
-  closedModal: () => void;
+  handleFinishOrder: (id: string) => void;
 }
 
-export default function ModalDetail({
-  isOpen,
-  order,
-  closedModal,
-}: ModalOrderProps) {
+export default function ModalDetail({ isOpen,order,onRequestClose, handleFinishOrder}: ModalOrderProps) {
+  
   return (
-    <Container>
-      <ContainerItems isOpen={isOpen}>
-        <AlignItems>
-          <Title>{"Cliente:"}</Title>
-          <Description>{order[0].order.name}</Description>
-        </AlignItems>
-        <AlignItems>
-          <Title>{"Mesa:"}</Title>
-          <Description>{order[0].order.table}</Description>
-        </AlignItems>
-        <AlignItems>
-          <Title>{"Status:"}</Title>
-          <Description
-            style={{ color: order[0].order.table ? "#19DE68" : "#E13030" }}>
-            {order[0].order.table ? "Aberto" : "Fechado"}
-          </Description>
-        </AlignItems>
-        <Title>- Detalhes do pedido -</Title>
-        {order.map((item, index) => (
-          <Description key={index} style={{ marginTop: 10 }}>
-            {item.amount} - {item.product.name} - {" "}
-            {"( R$ " + item.product.price + " )"}
-          </Description>
-        ))}
-        <AlignRowButton>
-          <ButtonClosedModal onPress={closedModal}>
-            <TextButtonClosedModal>Fechar</TextButtonClosedModal>
-          </ButtonClosedModal>
-          <ButtonEditDetail onPress={() => alert("Em breve")}>
-            <TextButtonEditDetail>Editar</TextButtonEditDetail>
-          </ButtonEditDetail>
-        </AlignRowButton>
-      </ContainerItems>
-    </Container>
+      <Container>
+        <ContainerItems
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
+        >
+          <AlignItems>
+            <Title>{"Cliente:"}</Title>
+            <Description>{order[0].order.name}</Description>
+          </AlignItems>
+          <AlignItems>
+            <Title>{"Mesa:"}</Title>
+            <Description>{order[0].order.table}</Description>
+          </AlignItems>
+          {/* <AlignItems>
+            <Title>{"Status:"}</Title>
+            <Description
+              style={{ color: order[0].order.table ? "#19DE68" : "#E13030" }}
+            >
+              {order[0].order.table ? "Aberto" : "Fechado"}
+            </Description>
+          </AlignItems> */}
+          <Title>- Detalhes do pedido -</Title>
+          {order.map((item, index) => (
+            <Description key={index} style={{ marginTop: 10 }}>
+              {item.amount} - {item.product.name} -{" "}
+              {"( R$ " + item.product.price + " )"}
+            </Description>
+          ))}
+          <AlignRowButton>
+            <ButtonClosedModal onPress={onRequestClose}>
+              <TextButtonClosedModal>Fechar</TextButtonClosedModal>
+            </ButtonClosedModal>
+            <ButtonEditDetail onPress={() => handleFinishOrder(order[0].order_id)}>
+              <TextButtonEditDetail>Finalizar</TextButtonEditDetail>
+            </ButtonEditDetail>
+          </AlignRowButton>
+        </ContainerItems>
+      </Container>
   );
 }
