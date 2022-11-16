@@ -14,8 +14,6 @@ import ButtonValidation from "../../components/ButtonValidation";
 
 export default function Search({ route }) {
   const [modal, setModal] = useState(false);
-  const [itemsOrder, setItemsOrder] = useState()
-
   //Buscando detalhes do pedido de um usuário especifico
   return (
     <Container>

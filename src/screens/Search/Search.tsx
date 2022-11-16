@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import { Entypo, FontAwesome  } from '@expo/vector-icons';
 import ModalDetail from "./components/ModalDetail";
 import {
   Container,
@@ -11,6 +10,8 @@ import {
   ContainerList,
   Text,
   List,
+  BorderList,
+  ContainerListBorder
 } from "./styles";
 import { Modal } from "react-native";
 import HeaderReturn from "../../components/HeaderReturn";
@@ -21,7 +22,6 @@ type OrderProps = {
   table: string | number;
   status: boolean;
   name: string;
-  first_name: string;
 };
 
 interface PedidosProps {
@@ -42,18 +42,18 @@ export type OrderItemProps = {
     id: string;
     table: string | number;
     status: boolean;
-    name: string | null;
+    name: string;
   };
 };
 
 export default function Search({ orders }: PedidosProps) {
-  const [search, setSearch] = useState("");
-
   //Contem todos os dados da lista
   const [clientes, setClientes] = useState(orders || []);
-  const [modalItem, setModalItem] = useState<OrderItemProps[]>();
+  const [modalItem, setModalItem] = useState<OrderItemProps[]>([]);
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [search, setSearch ] = useState('')
 
   /* console.log('modalItem', modalItem) */
 
@@ -65,7 +65,6 @@ export default function Search({ orders }: PedidosProps) {
     buscandoPedidos();
   }, [clientes]);
 
-
   async function handleGetClientDetail(id: string) {
     const response = await api.get("/order/detail", {
       params: {
@@ -76,11 +75,11 @@ export default function Search({ orders }: PedidosProps) {
     setModalVisible(true);
   }
 
-  function handleFinishItem(id: string){
-    const response = api.put('order/finish', {
-      order_id: id
-    })
-    setModalVisible(false)
+  async function handleFinishItem(id: string) {
+    const response = await api.put("/order/finish", {
+      order_id: id,
+    });
+    setModalVisible(false);
   }
 
   function closedModalDetail() {
@@ -92,17 +91,40 @@ export default function Search({ orders }: PedidosProps) {
       <HeaderReturn title="Pedidos Abertos" />
 
       <ContainerBody>
-        {clientes.map((item, index) => (
-          <ContainerList key={index}>
-            <List>
-              <Text style={{ color: "#fff" }}>
-                {item.name} - {"Mesa " + item.table}
-              </Text>
-              <ButtonIconSearch onPress={() => handleGetClientDetail(item.id)}>
-                <AntDesign name="setting" size={22} color="#fff" />
-              </ButtonIconSearch>
-            </List>
-          </ContainerList>
+        <ContainerInput>
+          <TextInput
+            placeholder="Buscar pedido..."
+            placeholderTextColor="#474747"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={search}
+            onChangeText={setSearch}
+          />
+          <FontAwesome  name="search" size={20} color="#474747" />
+        </ContainerInput>
+        {clientes.length === 0 && (
+          <Text style={{color: '#fff',opacity: 0.3, fontSize: 19}}>Não há pedidos abertos...</Text>
+        )}
+        {clientes.filter((val) => {
+          if(search === ''){
+            return val
+          }else if(val.name.toLowerCase().includes(search.toLowerCase())){
+            return val
+          }}).map((item, index) => (
+          <ContainerListBorder key={index}>
+            <BorderList></BorderList>
+            <ContainerList >
+              <List>
+                <Text style={{ color: "#fff" }}>
+                  {item.name} - {"Mesa " + item.table}
+                </Text>
+                <ButtonIconSearch
+                  onPress={() => handleGetClientDetail(item.id)}>
+                  <Entypo name="menu" size={25} color="#fff" />
+                </ButtonIconSearch>
+              </List>
+            </ContainerList>
+          </ContainerListBorder>
         ))}
       </ContainerBody>
       <Modal transparent={true} visible={modalVisible} animationType="fade">

@@ -15,7 +15,6 @@ export const ContainerInput = styled.View`
   width: 90%;
   background-color: #212121;
   border-radius: 30px;
-  margin-top: 10px;
   padding-left: 15px;
   padding-right: 15px;
   flex-direction: row;
@@ -52,3 +51,14 @@ export const List = styled.View`
     justify-content: space-between;
     flex-direction: row;
 `;
+export const BorderList = styled.View`
+  background-color: #19DE68;
+  height: 42px;
+  width: 4px;
+  margin-bottom: 10px;
+`
+export const ContainerListBorder = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`

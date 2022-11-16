@@ -36,7 +36,7 @@ export default function FinishOrder() {
   async function handleFinish(){
     /* alert('clicou') */
     try {
-      await api.put('/order/finish', {
+      await api.put('/order/send', {
         order_id: route.params.order_id
       })
       navigation.popToTop()
